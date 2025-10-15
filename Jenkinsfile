@@ -16,13 +16,16 @@ pipeline{
     }
     stage('push to dockerhub'){
       steps{
-        withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS)])
+        withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]){
       sh '''
-      echo %ODOCKER_PASS% |
+      echo %DOCKER_PASS% |
       docker login -u %DOCKER_USER% --password-stdin
       docker push %IMAGE_NAME%:latest
+      docker logout
+      '''
       }                                  
       }
     }
     }
     }
+}
